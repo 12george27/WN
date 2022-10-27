@@ -5,6 +5,7 @@
 #include "GFhost.h"
 #include "GFvec3.h"
 //aaaaaaaaaaaaaaaaaaaaaaaaaa
+//aaaaaaaaaaaaaaaaaaaaaaaaaa
 Vec3 maxValue(Vec3 nums[], int n) {
     Vec3 max_value; /* 最大値 */
     int i;
