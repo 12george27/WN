@@ -4,7 +4,7 @@
 #include <time.h>
 #include "GFhost.h"
 #include "GFvec3.h"
-
+//aaaaaaaaaaaaaaaaaaaaaaaaaa
 Vec3 maxValue(Vec3 nums[], int n) {
     Vec3 max_value; /* 最大値 */
     int i;
@@ -117,9 +117,10 @@ int main(){
 
     long cpu_time;
     double sec;
-    for(int k = 0 ; k < 10 ; k++){
+    //for(int k = 0 ; k < 10 ; k++){
         clock_t c_start,c_end;
         c_start = clock();
+    
     for(int j = 0 ; j < n_points ; j++){
         double winding_number = 0.0;
         Vec3 A,B,C;
@@ -149,6 +150,7 @@ int main(){
     c_end = clock();
     cpu_time = c_end - c_start;
     sec = (double)cpu_time / CLOCKS_PER_SEC;
+    
 
     //内側の点の抽出
     Vec3 *points_in;
@@ -167,7 +169,7 @@ int main(){
     printf("%lf %lf %lfs\n",v,v1,sec);
     count_1 = 0;
 
-    }
+    //}
     free(poly);
     free(p_list);
     free(points);
