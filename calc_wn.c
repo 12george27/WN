@@ -4,16 +4,12 @@
 #include <time.h>
 #include "GFhost.h"
 #include "GFvec3.h"
-//aaaaaaaaaaaaaaaaaaaaaaaaaa
-//aaaaaaaaaaaaaaaaaaaaaaaaaa
-//
+
 Vec3 maxValue(Vec3 nums[], int n) {
     Vec3 max_value; /* 最大値 */
     int i;
-
     /* nums[0]を最大値と仮定する */
     max_value = nums[0];
-
     for (i = 0; i < n; i++) {
         if (nums[i].x > max_value.x) {
             max_value.x = nums[i].x;
@@ -32,10 +28,8 @@ Vec3 maxValue(Vec3 nums[], int n) {
 Vec3 minValue(Vec3 nums[], int n) {
     Vec3 min_value; /* 最小値 */
     int i;
-
     /* nums[0]を最小値と仮定する */
     min_value = nums[0];
-
     for (i = 0; i < n; i++) {
         if (nums[i].x < min_value.x) {
             min_value.x = nums[i].x;
@@ -47,7 +41,6 @@ Vec3 minValue(Vec3 nums[], int n) {
             min_value.z = nums[i].z;
         }
     }
-
     return min_value;
 }
 
@@ -142,7 +135,7 @@ int main(){
             winding_number += atan2(Vdot(A,Vcross(B,C)) , (nA*nB*nC + Vdot(A,B)*nC +Vdot(B,C)*nA + Vdot(C,A)*nB ));
         }
     
-        double ep = 1.0e-13;
+        double ep = 9.0e-14;
         if (winding_number > 2 * M_PI - ep){
             ++count_1;
             flag[j] = 1;
