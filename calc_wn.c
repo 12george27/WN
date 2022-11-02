@@ -112,7 +112,7 @@ int main(){
 
     long cpu_time;
     double sec;
-    //for(int k = 0 ; k < 10 ; k++){
+    for(int k = 0 ; k < 10 ; k++){
         clock_t c_start,c_end;
         c_start = clock();
     
@@ -135,7 +135,7 @@ int main(){
             winding_number += atan2(Vdot(A,Vcross(B,C)) , (nA*nB*nC + Vdot(A,B)*nC +Vdot(B,C)*nA + Vdot(C,A)*nB ));
         }
     
-        double ep = 9.0e-14;
+        double ep = 5.3e-14;
         if (winding_number > 2 * M_PI - ep){
             ++count_1;
             flag[j] = 1;
@@ -158,17 +158,18 @@ int main(){
             cnt++;
         }  
     }
-    double v,v1;
+    double v,v1,err;
     v = (double)count_1 / (double)n_points * (double)8;
     v1 = (double)4/3 * M_PI;
-    printf("%lf %lf %lfs\n",v,v1,sec);
+    err = (v - v1) / v1 ;
+    printf("%lf %.15lf %lfs\n",v,err,sec);
     count_1 = 0;
 
-    //}
+    }
     free(poly);
     free(p_list);
     free(points);
-    //free(flag);
+    free(flag);
     //free(points_in);
 
     return 0;    

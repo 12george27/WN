@@ -1,14 +1,134 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+#include "GFhost.h"
+#include "GFvec3.h"
 
+Vec3 maxValue(Vec3 nums[], int n) {
+    Vec3 max_value; /* 最大値 */
+    int i;
+    /* nums[0]を最大値と仮定する */
+    max_value = nums[0];
+    for (i = 0; i < n; i++) {
+        if (nums[i].x > max_value.x) {
+            max_value.x = nums[i].x;
+        }
+        if (nums[i].y > max_value.y) {
+            max_value.y = nums[i].y;
+        }
+        if (nums[i].z > max_value.z) {
+            max_value.z = nums[i].z;
+        }
+    }
 
-struct pop_dt {         
-    int n[3];    
-    long pop;           
-};
+    return max_value;
+}
+
+Vec3 minValue(Vec3 nums[], int n) {
+    Vec3 min_value; /* 最小値 */
+    int i;
+    /* nums[0]を最小値と仮定する */
+    min_value = nums[0];
+    for (i = 0; i < n; i++) {
+        if (nums[i].x < min_value.x) {
+            min_value.x = nums[i].x;
+        }
+        if (nums[i].y < min_value.y) {
+            min_value.y = nums[i].y;
+        }
+        if (nums[i].z < min_value.z) {
+            min_value.z = nums[i].z;
+        }
+    }
+    return min_value;
+}
+
+double func(double x){
+    return 2*x-1;
+}
 
 int main(){
-    struct pop_dt p[5];
-    p[0].n[0] = 1;
-    printf("%d\n",p[0].n[0]);
-      return 0;
+    Vec3 points,*poly;
+    PLIST *v_list,*p_list;
+
+    int n_face,n_face_points,n_points;
+    int tmp;
+
+    //ポリゴンの読み込み
+    FILE *fp;
+    char fname[] = "sphere13500.txt";
+    fp = fopen(fname,"r");
+    if(fp == NULL) {
+		printf("%s file not open!\n", fname);
+		return -1;
+	}
+
+    //点の座標
+    fscanf(fp,"%d",&n_face_points);
+    poly = (Vec3 *)malloc(n_face_points * sizeof(Vec3));
+    for(int i = 0 ; i < n_face_points ; i++){
+        fscanf(fp,"%d%lf%lf%lf",&tmp,&poly[i].x,&poly[i].y,&poly[i].z);
+    }
+
+    //ポリゴン
+    fscanf(fp,"%d",&n_face);
+    p_list = (PLIST *)malloc(n_face * sizeof(PLIST));
+    int a,b,c;
+    for(int i = 0; i < n_face ; i++){
+        fscanf(fp,"%d%d%d%d",&tmp,&a,&b,&c);
+        p_list[i].v[0] = a - 1;   //配列の番号にあわせる　
+        p_list[i].v[1] = b - 1;
+        p_list[i].v[2] = c - 1;
+    }
+    fclose(fp);
+    //データ読み込み終了
+
+
+    //最大・最小
+    Vec3 max_value,min_value;
+    max_value = maxValue(poly,n_face_points);
+    min_value = minValue(poly,n_face_points);
+    //printf("%f %f %f \n",max_value.x,max_value.y,max_value.z);
+    //printf("%f %f %f \n",min_value.x,min_value.y,min_value.z);
+
+    //点の生成
+    
+    scanf("%lf%lf%lf",&points.x,&points.y,&points.z);     
+
+
+    //WNの計算
+    int count_1=0;
+    int count_2=0;
+        double winding_number = 0;
+        Vec3 A,B,C;
+        //#pragma omp parallel for reduction(+:winding_number)
+        for ( int i = 0; i < n_face; i++){
+            A = poly[p_list[i].v[0]];
+            B = poly[p_list[i].v[1]];
+            C = poly[p_list[i].v[2]];
+
+            A = Vsub(A,points);
+            B = Vsub(B,points);
+            C = Vsub(C,points);
+
+            double nA = Vnorm(A);
+            double nB = Vnorm(B);
+            double nC = Vnorm(C);
+            winding_number += atan2(Vdot(A,Vcross(B,C)) , (nA*nB*nC + Vdot(A,B)*nC +Vdot(B,C)*nA + Vdot(C,A)*nB ));
+        }
+    
+        double ep = 1.0e-13;
+        double s = winding_number - 2*M_PI;
+        double err = (winding_number - 2*M_PI)/ (2*M_PI);
+        if(winding_number >= 2*M_PI - ep) printf("s\n");
+        printf("%.15lf\n%.15lf\n",s,err);
+
+        
+        
+    free(poly);
+    free(p_list);
+    //free(flag);
+    //free(points_in);
+    return 0;    
 }
